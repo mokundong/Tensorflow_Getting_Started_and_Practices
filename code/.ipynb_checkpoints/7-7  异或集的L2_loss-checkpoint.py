@@ -54,30 +54,18 @@ np.random.seed(10)
 
 input_dim = 2
 num_classes =4 
-X, Y = generate(320,num_classes,  [[3.0,0],[3.0,3.0],[0,3.0]],True)
+X, Y = generate(120,num_classes,  [[3.0,0],[3.0,3.0],[0,3.0]],True)
 Y=Y%2
-#colors = ['r' if l == 0.0 else 'b' for l in Y[:]]
-#plt.scatter(X[:,0], X[:,1], c=colors)
-xr=[]
-xb=[]
-for(l,k) in zip(Y[:],X[:]):
-    if l == 0.0 :
-        xr.append([k[0],k[1]])        
-    else:
-        xb.append([k[0],k[1]])
-xr =np.array(xr)
-xb =np.array(xb)      
-plt.scatter(xr[:,0], xr[:,1], c='r',marker='+')
-plt.scatter(xb[:,0], xb[:,1], c='b',marker='o')
-
+colors = ['r' if l == 0.0 else 'b' for l in Y[:]]
+plt.scatter(X[:,0], X[:,1], c=colors)
+plt.xlabel("Scaled age (in yrs)")
+plt.ylabel("Tumor size (in cm)")
 plt.show() 
-
 Y=np.reshape(Y,[-1,1])
 
 learning_rate = 1e-4
 n_input  = 2
 n_label  = 1
-#n_hidden = 2#欠拟合
 n_hidden = 200
 
 
@@ -95,48 +83,39 @@ biases = {
 
 
 layer_1 = tf.nn.relu(tf.add(tf.matmul(x, weights['h1']), biases['h1']))
-#y_pred = tf.nn.tanh(tf.add(tf.matmul(layer_1, weights['h2']),biases['h2']))
-#y_pred = tf.nn.relu(tf.add(tf.matmul(layer_1, weights['h2']),biases['h2']))#局部最优解
 
-#y_pred = tf.nn.sigmoid(tf.add(tf.matmul(layer_1, weights['h2']),biases['h2']))
-
-#Leaky relus  40000次 ok
+#Leaky relus  
 layer2 =tf.add(tf.matmul(layer_1, weights['h2']),biases['h2'])
 y_pred = tf.maximum(layer2,0.01*layer2)
- 
- 
-loss=tf.reduce_mean((y_pred-y)**2)
+
+reg = 0.01 
+loss=tf.reduce_mean((y_pred-y)**2)+tf.nn.l2_loss(weights['h1'])*reg+tf.nn.l2_loss(weights['h2'])*reg
 train_step = tf.train.AdamOptimizer(learning_rate).minimize(loss)
 
 #加载
 sess = tf.InteractiveSession()
 sess.run(tf.global_variables_initializer())
     
-for i in range(20000):#  
+for i in range(20000):
+
+    X, Y = generate(1000,num_classes,  [[3.0,0],[3.0,3.0],[0,3.0]],True)
+    Y=Y%2
+    Y=np.reshape(Y,[-1,1])
   
-  _, loss_val = sess.run([train_step, loss], feed_dict={x: X, y: Y})
+    _, loss_val = sess.run([train_step, loss], feed_dict={x: X, y: Y})
+    
+    if i % 1000 == 0:
+        print ("Step:", i, "Current loss:", loss_val)
 
-  if i % 1000 == 0:
-    print ("Step:", i, "Current loss:", loss_val)
-
-#colors = ['r' if l == 0.0 else 'b' for l in Y[:]]
-#plt.scatter(X[:,0], X[:,1], c=colors)
-xr=[]
-xb=[]
-for(l,k) in zip(Y[:],X[:]):
-    if l == 0.0 :
-        xr.append([k[0],k[1]])        
-    else:
-        xb.append([k[0],k[1]])
-xr =np.array(xr)
-xb =np.array(xb)      
-plt.scatter(xr[:,0], xr[:,1], c='r',marker='+')
-plt.scatter(xb[:,0], xb[:,1], c='b',marker='o')
+colors = ['r' if l == 0.0 else 'b' for l in Y[:]]
+plt.scatter(X[:,0], X[:,1], c=colors)
+plt.xlabel("Scaled age (in yrs)")
+plt.ylabel("Tumor size (in cm)")
 
     
 nb_of_xs = 200
-xs1 = np.linspace(-3, 10, num=nb_of_xs)
-xs2 = np.linspace(-3, 10, num=nb_of_xs)
+xs1 = np.linspace(-1, 8, num=nb_of_xs)
+xs2 = np.linspace(-1, 8, num=nb_of_xs)
 xx, yy = np.meshgrid(xs1, xs2) # create the grid
 # Initialize and fill the classification plane
 classification_plane = np.zeros((nb_of_xs, nb_of_xs))
@@ -157,22 +136,10 @@ plt.show()
 
 xTrain, yTrain = generate(12,num_classes,  [[3.0,0],[3.0,3.0],[0,3.0]],True)
 yTrain=yTrain%2
-#colors = ['r' if l == 0.0 else 'b' for l in yTrain[:]]
-#plt.scatter(xTrain[:,0], xTrain[:,1], c=colors)
-
-xr=[]
-xb=[]
-for(l,k) in zip(yTrain[:],xTrain[:]):
-    if l == 0.0 :
-        xr.append([k[0],k[1]])        
-    else:
-        xb.append([k[0],k[1]])
-xr =np.array(xr)
-xb =np.array(xb)      
-plt.scatter(xr[:,0], xr[:,1], c='r',marker='+')
-plt.scatter(xb[:,0], xb[:,1], c='b',marker='o')
-
-
+colors = ['r' if l == 0.0 else 'b' for l in yTrain[:]]
+plt.scatter(xTrain[:,0], xTrain[:,1], c=colors)
+plt.xlabel("Scaled age (in yrs)")
+plt.ylabel("Tumor size (in cm)")
 #plt.show() 
 yTrain=np.reshape(yTrain,[-1,1])           
 print ("loss:\n", sess.run(loss, feed_dict={x: xTrain, y: yTrain}))          
