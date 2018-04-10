@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Jul  6 08:53:25 2017
 
-@author: 代码医生 qq群：40016981，公众号：xiangyuejiqiren
-@blog：http://blog.csdn.net/lijin6249
-"""
 
 import urllib.request
 import re
@@ -33,24 +28,27 @@ def urlTolist(url):
     return allCodeList
     
 
-start = '20161031'
-end='20161231'
-'''
+start = '20180101'
+end='20180331'
+#start = '20171230'
+#end='2018411'
+
+
 allCodelist = urlTolist(stock_CodeUrl)
 for code in allCodelist:
     print('正在获取%s股票数据...'%code)
-    if code[0]=='6':
+    if code[0]=='0':
         url = 'http://quotes.money.163.com/service/chddata.html?code=0'+code+\
         '&start='+start+'&end='+end+'&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
     else:
         url = 'http://quotes.money.163.com/service/chddata.html?code=1'+code+\
         '&start='+start+'&end='+end+'&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
-    urllib.request.urlretrieve(url,'d:\\all_stock_data\\'+code+'_'+end+'.csv')#可以加一个参数dowmback显示下载进度
-'''    
+    urllib.request.urlretrieve(url,'E:\\work\\Tensorflow_Getting_Started_and_Practices\\code\\gp\\'+code+'_'+end+'.csv')#可以加一个参数dowmback显示下载进度
+    
 
 #test
-code='600000'
-url = 'http://quotes.money.163.com/service/chddata.html?code=0'+code+\
-        '&start='+start+'&end='+end+'&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
-urllib.request.urlretrieve(url,'d:\\all_stock_data\\'+code+'_'+end+'.csv')#可以加一个参数dowmback显示下载进度
+#code='600000'
+#url = 'http://quotes.money.163.com/service/chddata.html?code=0'+code+\
+#        '&start='+start+'&end='+end+'&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
+#urllib.request.urlretrieve(url,'E:\\work\\Tensorflow_Getting_Started_and_Practices\\code\\'+code+'_'+end+'.csv')#可以加一个参数dowmback显示下载进度
     

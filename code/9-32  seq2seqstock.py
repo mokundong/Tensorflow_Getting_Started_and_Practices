@@ -32,7 +32,7 @@ def loadstock(window_size):
          'amount',
          '总市值',
          '流通市值']
-    data = pd.read_csv('600000.csv', names=names, header=None,encoding = "gbk")
+    data = pd.read_csv('E:\\work\\Tensorflow_Getting_Started_and_Practices\\code\\gp\\600459_20180331.csv', names=names, header=None,encoding = "gbk")
     #predictor_names = ["Close",'top_price',"low_price","opening_price"]
     predictor_names = ["Close"]
     training_features = np.asarray(data[predictor_names], dtype = "float32")
