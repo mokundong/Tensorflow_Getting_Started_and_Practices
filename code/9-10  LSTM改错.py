@@ -31,7 +31,7 @@ mcell = tf.contrib.rnn.MultiRNNCell(stacked_rnn)
 
 outputs, states = tf.contrib.rnn.static_rnn(mcell, x, dtype=tf.float32)
 
-pred = tf.contrib.layers.fully_connected(outputs,n_classes,activation_fn = None)
+pred = tf.contrib.layers.fully_connected(outputs,n_classes,activation_fn = None)##
 
 
 

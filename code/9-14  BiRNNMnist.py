@@ -9,7 +9,7 @@ import tensorflow as tf
 from tensorflow.contrib import rnn
 # 导入 MINST 数据集
 from tensorflow.examples.tutorials.mnist import input_data
-mnist = input_data.read_data_sets("/data/", one_hot=True)
+mnist = input_data.read_data_sets("./data/", one_hot=True)
 
 #参数设置
 learning_rate = 0.001
