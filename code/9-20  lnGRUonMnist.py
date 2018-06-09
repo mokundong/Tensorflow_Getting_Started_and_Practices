@@ -11,13 +11,12 @@ import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("/data/", one_hot=True)
 
-from tensorflow.python.ops.rnn_cell_impl import _RNNCell as RNNCell
+from tensorflow.python.ops.rnn_cell_impl import RNNCell as RNNCell
 from tensorflow.python.ops.math_ops import sigmoid
 from tensorflow.python.ops.math_ops import tanh
 from tensorflow.python.ops import variable_scope as vs
 from tensorflow.python.ops import array_ops
-from tensorflow.contrib.rnn.python.ops.core_rnn_cell_impl import _linear 
-
+from tensorflow.contrib.rnn.python.ops.core_rnn_cell import _Linear
 
 print(tf.__version__)
 
@@ -62,14 +61,14 @@ class LNGRUCell(RNNCell):
         """Gated recurrent unit (GRU) with nunits cells."""
         with vs.variable_scope("Gates"):  # Reset gate and update gate.,reuse=True
             # We start with bias of 1.0 to not reset and not update.
-            value =_linear([inputs, state], 2 * self._num_units, True, 1.0)
+            value =_Linear([inputs, state], 2 * self._num_units, True, 1.0)
             r, u = array_ops.split(value=value, num_or_size_splits=2, axis=1)
             r = ln(r, scope = 'r/')
             u = ln(u, scope = 'u/')
             r, u = sigmoid(r), sigmoid(u)
         with vs.variable_scope("Candidate"):
 #            with vs.variable_scope("Layer_Parameters"):
-            Cand = _linear([inputs,  r *state], self._num_units, True)
+            Cand = _Linear([inputs,  r *state], self._num_units, True)
             c_pre = ln(Cand,  scope = 'new_h/')
             c = self._activation(c_pre)
         new_h = u * state + (1 - u) * c
